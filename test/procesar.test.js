@@ -47,3 +47,25 @@ test("procesar maneja nombre ausente", () => {
   assert.equal(res.statusCode, 200);
   assert.ok(res.body.resultado.includes("ANÓNIMO"));
 });
+test("respuesta tiene estructura mínima (resultado y longitud)", () => {
+  const req = { query: { nombre: "ana" } };
+
+  const res = {
+    statusCode: null,
+    body: null,
+    status(code) {
+      this.statusCode = code;
+      return this;
+    },
+    json(payload) {
+      this.body = payload;
+      return this;
+    }
+  };
+
+  handler(req, res);
+
+  assert.equal(res.statusCode, 200);
+  assert.ok("resultado" in res.body);
+  assert.ok("longitud" in res.body);
+});
